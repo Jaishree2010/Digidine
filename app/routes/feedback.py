@@ -11,14 +11,14 @@ def submit_feedback():
         rating = request.form['rating']
         user_id = session.get('user_id')
         cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO feedback (user_id, message, rating) VALUES (%s, %s, %s)",
-                    (user_id, message, rating))
+        cur.execute("INSERT INTO feedback (user_id, message, rating, created_at) VALUES (%s, %s, %s)",
+                    (user_id, message, rating, 'NOW()'))
         mysql.connection.commit()
         cur.close()
         flash("Thank you for your feedback!", "success")
         return redirect('/')
     return render_template('feedback.html')
-
+    
 
 @feedback_bp.route('/admin/feedback')
 def view_feedback():

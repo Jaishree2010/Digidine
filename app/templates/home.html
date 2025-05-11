@@ -22,19 +22,18 @@
     "></div>
 
     <!-- Centered Content -->
-    <div class="container h-100 d-flex justify-content-center align-items-center text-white"
+    <div class="container h-100 d-flex flex-column justify-content-center align-items-end text-white text-center"
         style="z-index: 1; position: relative;">
 
         {% if not session.get('username') %}
         <!-- Guest View -->
-        <div>
+        <div class="guest-view text-center">
             <h1 class="display-4 fw-bold mb-3">Delicious Meals<br>at Your Fingertips</h1>
             <p class="lead mb-4">Browse our digital menu and order your<br>favorite dishes online.</p>
 
             <div class="d-flex justify-content-center gap-3 flex-wrap">
                 <a href="/auth/login" class="btn btn-outline-light rounded-pill px-5 py-2">Login</a>
                 <a href="/auth/signup" class="btn btn-warning text-white rounded-pill px-5 py-2">Sign up</a>
-                <!-- <a href="/auth/guest" class="btn btn-outline-light px-4 py-2">Guest Access</a> -->
             </div>
         </div>
         {% else %}
@@ -54,7 +53,6 @@
             <p class="lead text-light mb-4">Use the below navigation to check customer orders.</p>
             <a href="/kitchen/dashboard" class="btn btn-warning text-white rounded-pill px-4 py-2 shadow-sm">Orders</a>
             {% endif %}
-
         </div>
         {% endif %}
 

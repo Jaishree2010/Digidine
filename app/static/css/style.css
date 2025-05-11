@@ -62,6 +62,7 @@ main, footer, .navbar {
   color: #ffc107 !important;
 }
 
+
 .nav-link {
   color: #ffffff !important;
 }
@@ -109,7 +110,6 @@ p {
 
 .table-dark th,
 .table-dark td {
-  color: #fff;
   border-color: #444;
 }
 
@@ -146,4 +146,8 @@ p {
   50% {
     transform: translateY(-10px);
   }
+}
+
+.form-label {
+    color: antiquewhite;
 }

@@ -12,4 +12,4 @@ DIGIDINE – Setup Instructions
    - pip install -r requirements.txt
 6. Start server:
    python run.py
-7. Open http://127.0.0.1:5000 in browser
+7. Open http://localhost:5000 in browser

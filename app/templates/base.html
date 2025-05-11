@@ -61,6 +61,7 @@
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav gap-3">
+                    {% if session.get('role') == 'customer' %}
                     <li class="nav-item">
                         <a class="nav-link position-relative" href="/notifications">
                             🔔
@@ -70,16 +71,16 @@
                             {% endif %}
                         </a>
                     </li>
-
+                    {% endif %}
 
 
 
 
                     {% if session.get('role') == 'admin' %}
-                    <li class="nav-item"><a class="nav-link" href="/customer/dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/dashboard">Dashboard</a></li>
                     {% endif %}
                     {% if session.get('role') == 'customer' %}
-                    <li class="nav-item"><a class="nav-link" href="/admin/dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/customer/dashboard">Dashboard</a></li>
                     <li class="nav-item"><a class="nav-link" href="/customer/menu">Menu</a></li>
 
                     <li class="nav-item"><a class="nav-link" href="/feedback/submit">Feedback</a></li>
@@ -151,7 +152,9 @@
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background-color: #000;
+    background-color: #f6c344;
+    background-size: cover;
+    background-position: center;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -159,8 +162,8 @@
     transition: opacity 0.5s ease;
 ">
     <div class="text-center">
-        <img src="/static/favicon2.png" alt="DIGIDINE" width="60" class="mb-3 animate-bounce">
-        <h3 class="text-warning fw-bold">DIGIDINE</h3>
+        <img src="/static/splash.gif" alt="DIGIDINE" width="200" class="mb-3 animate-bounce">
+        <h3  style="color: aliceblue;">DIGIDINE</h3>
         <div class="spinner-border text-warning mt-3" role="status"></div>
     </div>
 </div>

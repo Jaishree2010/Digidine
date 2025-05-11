@@ -1,7 +1,10 @@
+import random
+import string
 from flask import Blueprint, render_template, request, redirect, session, flash, url_for
-from app.extensions import mysql
+from flask_mail import Message
+from app.extensions import mysql, mail
 
-auth_bp = Blueprint('auth_bp', __name__, template_folder='../../templates')
+auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 # Only admins can sign up using this secret key
 ADMIN_SIGNUP_ACCESS = "admin-secret"
@@ -12,6 +15,8 @@ def login():
     if request.method == 'POST':
         email = request.form['email'].strip().lower()
         password = request.form['password']
+        role = request.form.get('role')
+        
 
         cur = mysql.connection.cursor()
         cur.execute(
@@ -23,6 +28,9 @@ def login():
             session['user_id'] = user[0]
             session['username'] = user[1]
             session['role'] = user[4]
+
+            if role != user[4]:
+                flash('Invalid secret key for {user[4]} signup.', 'danger')
 
             if user[4] == 'admin':
                 return redirect('/admin/dashboard')
@@ -74,19 +82,35 @@ def guest_access():
 @auth_bp.route('/forgot-password', methods=['GET', 'POST'])
 def forgot_password():
     if request.method == 'POST':
-        email = request.form['email'].strip().lower()
+        email = request.form.get('email')
 
+        # Check if the email exists in the database
         cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM users WHERE email=%s", (email,))
+        cur.execute("SELECT id FROM users WHERE email = %s", (email,))
         user = cur.fetchone()
-        cur.close()
 
         if user:
-            # Logic to send a password reset email (placeholder)
-            flash('Password reset instructions have been sent to your email.', 'success')
-        else:
-            flash('No account found with that email address.', 'danger')
+            # Generate a random password
+            new_password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
 
-        return redirect(url_for('auth_bp.forgot_password'))
+            # Update the password in the database
+            cur.execute("UPDATE users SET password = %s WHERE email = %s", (new_password, email))
+            mysql.connection.commit()
+            cur.close()
+
+            # Send the new password via email
+            msg = Message(
+                subject="Your New Password",
+                sender="noreply@digidine.com",
+                recipients=[email]
+            )
+            msg.body = f"Hello,\n\nYour new password is: {new_password}\n\nPlease log in and change your password immediately."
+            mail.send(msg)
+
+            flash("A new password has been sent to your email.", "success")
+            return redirect(url_for('auth.login'))
+        else:
+            flash("Email not found. Please try again.", "danger")
+            return redirect(url_for('auth.forgot_password'))
 
     return render_template('forgot-password.html')

@@ -1,30 +1,42 @@
 from flask import Flask, session
-from flask_mysqldb import MySQL
 from flask_session import Session
+from app.extensions import mysql # Import mail from extensions
 from app.routes.customer import customer_bp
 from app.routes.admin import admin_bp
 from app.routes.kitchen import kitchen_bp
 from app.routes.reservation import reservation_bp
 from app.routes.feedback import feedback_bp
-from app.extensions import mysql
 from app.routes.main import main_blueprint
 from app.routes.auth import auth_bp
 from app.routes.notifications import notifications_bp
 from app.routes.payment import payment_bp
 from app.routes.menu_admin import menu_bp
+from config import CONFIG  # Import the configuration
+from flask_mail import Mail
 
+mail = Mail()
 
 def create_app():
     app = Flask(__name__, static_folder='static', static_url_path='/static')
 
-    app.secret_key = 'your_secret_key'
+    # Load configuration
+    app.secret_key = CONFIG['SECRET_KEY']
+    app.config['MYSQL_HOST'] = CONFIG['MYSQL_HOST']
+    app.config['MYSQL_USER'] = CONFIG['MYSQL_USER']
+    app.config['MYSQL_PASSWORD'] = CONFIG['MYSQL_PASSWORD']
+    app.config['MYSQL_DB'] = CONFIG['MYSQL_DB']
+    app.config['SESSION_TYPE'] = CONFIG['SESSION_TYPE']
 
-    app.config['MYSQL_HOST'] = 'localhost'
-    app.config['MYSQL_USER'] = 'root'
-    app.config['MYSQL_PASSWORD'] = 'admin123'
-    app.config['MYSQL_DB'] = 'digidine'
+    # Flask-Mail configuration
+    app.config['MAIL_SERVER'] = CONFIG['MAIL_SERVER']
+    app.config['MAIL_PORT'] = CONFIG['MAIL_PORT']
+    app.config['MAIL_USE_TLS'] = CONFIG['MAIL_USE_TLS']
+    app.config['MAIL_USERNAME'] = CONFIG['MAIL_USERNAME']
+    app.config['MAIL_PASSWORD'] = CONFIG['MAIL_PASSWORD']
+    app.config['MAIL_USE_SSL'] = CONFIG['MAIL_USE_SSL']
+    app.config['MAIL_DEFAULT_SENDER'] = ('DIGIDINE', 'work.jeevanebi@gmail.com')
+    mail.init_app(app)
 
-    app.config['SESSION_TYPE'] = 'filesystem'
     mysql.init_app(app)
     Session(app)
 

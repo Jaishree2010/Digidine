@@ -9,12 +9,12 @@ customer_bp = Blueprint('customer_bp', __name__,
 
 @customer_bp.route('/customer/menu', methods=['GET'])
 def menu():
-    selected_category = request.args.get('category')
+    selected_foodtype = request.args.get('foodtype')
     cur = mysql.connection.cursor()
 
-    if selected_category:
-        cur.execute("SELECT * FROM menu_items WHERE category = %s",
-                    (selected_category,))
+    if selected_foodtype:
+        cur.execute("SELECT * FROM menu_items WHERE foodtype = %s",
+                    (selected_foodtype,))
     else:
         cur.execute("SELECT * FROM menu_items")
     items = cur.fetchall()
@@ -24,7 +24,7 @@ def menu():
     categories = [row[0] for row in cur.fetchall()]
     cur.close()
 
-    return render_template('menu.html', items=items, categories=categories, selected_category=selected_category)
+    return render_template('menu.html', items=items, categories=categories, selected_foodtype=selected_foodtype)
 
 
 @customer_bp.route('/customer/add_to_cart', methods=['POST'])
@@ -286,7 +286,7 @@ def notifications():
 
 @customer_bp.route('/customer/dashboard')
 def customer_dashboard():
-    if 'user_id' not in session or session.get('role') != 'customer':
+    if 'user_id' not in session and session.get('role') != 'customer':
         flash("Access denied. Customers only.", "danger")
         return redirect('/')
 
