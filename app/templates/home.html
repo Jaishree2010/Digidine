@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero-section position-relative" style="
+    height: 100vh;
+    background-image: url('/static/images/bg5.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding-top: 70px;
+">
+
+    <!-- Dark Overlay -->
+    <div style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 0;
+    "></div>
+
+    <!-- Centered Content -->
+    <div class="container h-100 d-flex justify-content-center align-items-center text-white"
+        style="z-index: 1; position: relative;">
+
+        {% if not session.get('username') %}
+        <!-- Guest View -->
+        <div>
+            <h1 class="display-4 fw-bold mb-3">Delicious Meals<br>at Your Fingertips</h1>
+            <p class="lead mb-4">Browse our digital menu and order your<br>favorite dishes online.</p>
+
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <a href="/auth/login" class="btn btn-outline-light rounded-pill px-5 py-2">Login</a>
+                <a href="/auth/signup" class="btn btn-warning text-white rounded-pill px-5 py-2">Sign up</a>
+                <!-- <a href="/auth/guest" class="btn btn-outline-light px-4 py-2">Guest Access</a> -->
+            </div>
+        </div>
+        {% else %}
+        <!-- Logged-in View -->
+        <div class="bg-secondary bg-opacity-75 rounded p-5 text-center shadow-lg">
+            <h2 class="fw-bold text-white mb-3">
+                Welcome back, <span style="text-transform: uppercase;">{{ session['username'] }}</span>! 👋
+            </h2>
+            {% if session.get('role') == 'customer' %}
+            <p class="lead text-light mb-4">Use the below navigation to dashboard.</p>
+            <a href="/customer/dashboard" class="btn btn-warning text-white rounded-pill px-4 py-2 shadow-sm">Go to
+                Dashboard</a>
+            {% elif session.get('role') == 'admin' %}
+            <p class="lead text-light mb-4">Use the below navigation to dashboard.</p>
+            <a href="/admin/dashboard" class="btn btn-warning text-white rounded-pill px-4 py-2 shadow-sm">Dashboard</a>
+            {% elif session.get('role') == 'kitchen' %}
+            <p class="lead text-light mb-4">Use the below navigation to check customer orders.</p>
+            <a href="/kitchen/dashboard" class="btn btn-warning text-white rounded-pill px-4 py-2 shadow-sm">Orders</a>
+            {% endif %}
+
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

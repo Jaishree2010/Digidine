@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="hero-section position-relative"
+    style="height: 100vh; background-image: url('/static/images/bg.jpg'); background-size: cover;">
+    <div
+        style="position: absolute; top: 0; left: 0; height: 100%; width: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 0;">
+    </div>
+    <div class="container d-flex justify-content-center align-items-center"
+        style="height: 100vh; position: relative; z-index: 2;">
+        <div class="card bg-dark text-white p-4 shadow" style="width: 100%; max-width: 450px; border-radius: 10px;">
+            <h3 class="text-warning fw-bold text-center mb-3">Add Kitchen Staff</h3>
+            <form method="POST">
+                <div class="mb-3">
+                    <input type="text" name="username" class="form-control form-control-lg" placeholder="Username"
+                        required>
+                </div>
+                <div class="mb-3">
+                    <input type="email" name="email" class="form-control form-control-lg" placeholder="Email" required>
+                </div>
+                <div class="mb-3">
+                    <input type="password" name="password" class="form-control form-control-lg" placeholder="Password"
+                        required>
+                </div>
+                <input type="hidden" name="role" value="kitchen">
+                <button class="btn btn-success w-100 py-2 fw-bold shadow-sm">Add Staff</button>
+            </form>
+            <div class="text-center mt-3">
+                <a href="/admin/users" class="text-warning">← Back to Users</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

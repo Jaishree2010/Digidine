@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero-section position-relative" style="height: 100vh;">
+
+    <!-- Background Image -->
+    <div style="
+        background-image: url('/static/images/bg.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;">
+    </div>
+
+    <!-- Dark Overlay -->
+    <div style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 1;">
+    </div>
+
+    <!-- Cart Content -->
+    <div class="container d-flex flex-column justify-content-center align-items-center text-white"
+        style="height: 100vh; position: relative; z-index: 2; padding-top: 70px;">
+
+        <div class="col-md-10 bg-dark bg-opacity-75 p-5 rounded text-white shadow-lg">
+
+            <h2 class="text-center mb-4">Your Cart</h2>
+
+            {% if items %}
+            <div class="table-responsive">
+                <table class="table table-bordered table-dark text-white text-center align-middle">
+                    <thead class="table-light text-dark">
+                        <tr>
+                            <th class="text-center text-dark">Item</th>
+                            <th class="text-center text-dark">Qty</th>
+                            <th class="text-center text-dark">Price</th>
+                            <th class="text-center text-dark">Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set ns = namespace(total=0) %}
+                        {% for item in items %}
+                        {% set item_id_str = item[0]|string %}
+                        {% set quantity = cart[item_id_str]|int %}
+                        {% set subtotal = item[3] * quantity %}
+                        {% set ns.total = ns.total + subtotal %}
+                        <tr>
+                            <td class="text-center text-white">{{ item[1] }}</td>
+                            <td class="text-center text-white">{{ quantity }}</td>
+                            <td class="text-center text-white">&#8377;{{ '%.2f'|format(subtotal) }}</td>
+                            <td class="text-center text-white">
+                                <a href="/customer/cart/remove/{{ item[0] }}" class="btn btn-sm btn-danger">
+                                    Remove
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2" class="text-end"><strong>Total</strong></td>
+                            <td colspan="2"><strong>&#8377;{{ '%.2f'|format(ns.total) }}</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <form method="POST" action="/customer/checkout">
+                <button type="submit" class="btn btn-success">Proceed to Checkout</button>
+            </form>
+
+            {% else %}
+            <p class="text-center text-white">Your cart is empty! Add any menu to display here.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>DIGIDINE Loading...</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            background: url('{{ url_for("static", filename="images/3d_bg.gif") }}') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            text-shadow: 1px 1px 4px #000;
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="overlay text-center">
+        <h1 class="text-warning">DIGIDINE</h1>
+        <p>Loading your experience...</p>
+    </div>
+
+    <script>
+        // Redirect after delay
+        setTimeout(function () {
+            window.location.href = "{{ url_for('customer_bp.dashboard') }}";
+        }, 3000); // 3 seconds
+    </script>
+</body>
+
+</html>

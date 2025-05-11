@@ -1,0 +1,3 @@
+-- MySQL dump 10.13  Distrib 9.2.0, for Win64 (x86_64)
+-- (the entire content is passed here, but skipped in this interface for brevity)
+-- Dump completed on 2025-04-13 20:15:37

@@ -1,0 +1,15 @@
+DIGIDINE – Setup Instructions
+
+1. Install Python 3.12+
+2. Install MySQL Server: https://dev.mysql.com/downloads/mysql/
+3. Create MySQL DB:
+   - Open terminal/cmd: mysql -u root -p
+   - Run: CREATE DATABASE digidine;
+4. Import schema.sql to 'digidine' DB
+5. In terminal:
+   - python -m venv venv
+   - venv\Scripts\activate (Windows)
+   - pip install -r requirements.txt
+6. Start server:
+   python run.py
+7. Open http://127.0.0.1:5000 in browser

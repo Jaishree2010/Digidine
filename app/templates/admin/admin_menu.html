@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        {% include 'admin/_sidebar.html' %}
+
+        <!-- Main Panel -->
+        <div class="col-md-9 col-lg-10 py-5 px-4" style="min-height: 100vh;">
+            <a href="/admin/dashboard" class="btn btn-sm btn-outline-warning mb-3">← Back to Dashboard</a>
+
+            <h2 class="text-warning mb-4 fw-bold">Manage Menu</h2>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="mb-3">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <!-- Add Menu Form -->
+            <form method="POST" enctype="multipart/form-data" class="row g-3 align-items-end mb-4">
+                <div class="col-md-3">
+                    <label class="form-label">Name</label>
+                    <input type="text" name="name" class="form-control" placeholder="Menu name" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Description</label>
+                    <input type="text" name="description" class="form-control" placeholder="Description" required>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Price (₹)</label>
+                    <input type="number" step="0.01" name="price" class="form-control" placeholder="Price" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Category</label>
+                    <input list="categoryList" name="category" id="category" class="form-control"
+                        placeholder="Select or type category" required>
+                    <datalist id="categoryList">
+                        {% for cat in categories %}
+                        <option value="{{ cat }}"></option>
+                        {% endfor %}
+                    </datalist>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Image</label>
+                    <input type="file" name="image" class="form-control" accept="image/*">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-warning text-white w-100 shadow-sm">Add Item +</button>
+                </div>
+            </form>
+
+            <!-- Delete All Button -->
+            <div class="text-center mb-4">
+                <form method="POST" action="/admin/menu/delete_all"
+                    onsubmit="return confirm('Are you sure you want to delete ALL menu items?');">
+                    <button class="btn btn-danger shadow-sm">🗑️ Delete All Items</button>
+                </form>
+            </div>
+
+            <!-- Menu Table -->
+            {% if items and items|length > 0 %}
+            <div class="table-responsive rounded shadow-sm" style="max-height: 60vh; overflow-y: auto;">
+                <table class="table table-dark table-hover table-striped align-middle text-center mb-0">
+                    <thead class="table-light text-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Category</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <td>{{ item[0] }}</td>
+                            <td>
+                                <div style="width: 60px; height: 60px; overflow: hidden; border-radius: 5px;">
+                                    <img src="{% if item[5] %}{{ url_for('static', filename='uploads/' + item[5]) }}{% else %}{{ url_for('static', filename='images/food.jpg') }}{% endif %}"
+                                        alt="Item Image" class="img-fluid"
+                                        style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                            </td>
+                            <td>{{ item[1] }}</td>
+                            <td>{{ item[2] }}</td>
+                            <td>&#8377;{{ '%.2f'|format(item[3]) }}</td>
+                            <td>{{ item[4] }}</td>
+                            <td>
+                                <form method="POST" action="/admin/menu/delete/{{ item[0] }}">
+                                    <button type="submit" class="btn btn-sm btn-danger"
+                                        onclick="return confirm('Delete this item?');">🗑️ Delete</button>
+                                </form>
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center mt-4">
+                <p class="text-muted">No menu items found. Please add some items above.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer class="bg-dark text-white text-center py-3">
+    <small>&copy; 2025 DIGIDINE - All Rights Reserved.</small>
+</footer>
+{% endblock %}

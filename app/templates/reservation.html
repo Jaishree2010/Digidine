@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="text-center mb-4">Book a Table</h2>
+    <form method="POST" class="mx-auto" style="max-width: 500px;">
+        <input type="date" name="date" class="form-control mb-3" required>
+        <input type="time" name="time" class="form-control mb-3" required>
+        <input type="number" name="guests" class="form-control mb-3" placeholder="Guests" required>
+        <textarea name="message" class="form-control mb-3" placeholder="Message (optional)"></textarea>
+        <button class="btn btn-warning w-100">Submit Reservation</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+
+        {% include 'admin/_sidebar.html' %}
+
+        <div class="col-md-9 col-lg-10 py-5 px-4" style="min-height: 100vh;">
+            <a href="/admin/dashboard" class="btn btn-sm btn-outline-warning mb-3">← Back to Dashboard</a>
+            <h3 class="text-warning mb-4">💬 Feedbacks</h3>
+
+            {% if feedback and feedback|length > 0 %}
+            <div class="table-responsive rounded shadow-sm bg-dark text-white p-3">
+                <table class="table table-dark table-striped align-middle text-center mb-0">
+                    <thead class="table-light text-dark">
+                        <tr>
+                            <th class="text-center text-dark">ID</th>
+                            <th class="text-center text-dark">User</th>
+                            <th class="text-center text-dark">Message</th>
+                            <th class="text-center text-dark">Rating</th>
+                            <th class="text-center text-dark">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for f in feedback %}
+                        <tr>
+                            <td>{{ f[0] }}</td>
+                            <td>{{ f[1] }}</td>
+                            <td>{{ f[2] }}</td>
+                            <td>⭐ {{ f[3] }}</td>
+                            <td>{{ f[4] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center mt-5">
+                <p class="text-muted fs-5">No feedback found.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

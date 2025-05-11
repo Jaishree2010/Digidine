@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero-section position-relative" style="height: 100vh; overflow: hidden;">
+
+    <!-- Background Image -->
+    <div style="
+        background-image: url('/static/images/bg4.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;">
+    </div>
+
+    <!-- Dark Overlay -->
+    <div style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 1;">
+    </div>
+
+    <!-- Fixed View Cart Button -->
+    <div style="
+        position: absolute;
+        top: 70px;
+        right: 15.5%;
+        z-index: 3;">
+        <a href="/customer/cart" class="btn btn-warning shadow px-4 py-2 rounded-pill">
+            🛒 View Cart
+        </a>
+    </div>
+
+    <!-- Foreground Content -->
+    <div class="container bg-white text-dark rounded shadow px-4 py-4"
+        style="position: relative; z-index: 2; margin-top: 120px; height: calc(100vh - 140px); overflow-y: auto;">
+
+        <h2 class="text-center mb-4 fw-bold">Our Menu</h2>
+
+        <!-- Category Filters -->
+        {% if categories %}
+        <div class="mb-4 text-center">
+            <div class="d-flex justify-content-center flex-wrap gap-2">
+                <a href="/customer/menu"
+                    class="btn {% if not selected_category %}btn-warning text-white{% else %}btn-outline-warning text-dark{% endif %} rounded-pill px-4 py-2 shadow-sm">
+                    All
+                </a>
+                {% for cat in categories %}
+                <a href="/customer/menu?category={{ cat }}"
+                    class="btn {% if selected_category == cat %}btn-warning text-white{% else %}btn-outline-warning text-dark{% endif %} rounded-pill px-4 py-2 shadow-sm">
+                    {{ cat }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Veg Toggle Switch -->
+        <div class="text-center mb-4">
+            <div class="form-check form-switch d-inline-flex align-items-center">
+                <input class="form-check-input" type="checkbox" id="vegSwitch" onchange="filterVeg()" {% if
+                    selected_category=='VEG' %}checked{% endif %}>
+                <label class="form-check-label ms-2 fw-bold text-dark" for="vegSwitch" id="vegLabel">
+                    {% if selected_category == 'VEG' %}Showing Veg Only{% else %}Showing All{% endif %}
+                </label>
+            </div>
+        </div>
+
+        <!-- Menu Items -->
+        {% if items %}
+        <div class="row">
+            {% for item in items %}
+            <div class="col-md-4 mb-4">
+                <div class="card bg-dark text-white h-100 shadow-sm border-secondary">
+                    <div class="menu-img-container" style="overflow: hidden;">
+                        <img src="{% if item[5] %}{{ url_for('static', filename='uploads/' ~ item[5]) }}{% else %}{{ url_for('static', filename='images/food.jpg') }}{% endif %}"
+                            alt="Item Image" class="img-fluid"
+                            style="width: 100%; height: 200px; object-fit: cover; transition: transform 0.3s ease;"
+                            onmouseover="this.style.transform='scale(1.1)';"
+                            onmouseout="this.style.transform='scale(1)'">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-uppercase">{{ item[1] }}</h5>
+                        <p class="card-text">{{ item[2] }}</p>
+                        <p class="card-text fw-bold">&#8377;{{ '%.2f'|format(item[3]) }}</p>
+                        <form method="POST" action="/customer/add_to_cart">
+                            <input type="hidden" name="item_id" value="{{ item[0] }}">
+                            <input type="number" name="quantity" value="1" min="1" class="form-control mb-2">
+                            <button class="btn btn-warning w-100">Add to Cart</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-center text-muted">No menu items available for the selected filter.</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    function filterVeg() {
+        const isVeg = document.getElementById('vegSwitch').checked;
+        if (isVeg) {
+            window.location.href = '/customer/menu?category=VEG';
+        } else {
+            window.location.href = '/customer/menu';
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5 text-center" style="min-height: 90vh;">
+    <h2 class="mb-4 fw-bold">Choose Payment Method</h2>
+    <div class="d-flex justify-content-center gap-4">
+        <a href="/customer/pay/cash" class="btn btn-lg btn-success px-4">Pay with Cash</a>
+        <a href="/customer/pay/qr" class="btn btn-lg btn-warning px-4 text-white">Scan QR</a>
+    </div>
+</div>
+{% endblock %}

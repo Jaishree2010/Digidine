@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        {% include 'admin/_sidebar.html' %}
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10 py-5 px-4 bg-black text-white min-vh-100">
+
+            <h2 class="text-warning mb-4">Admin Dashboard - Orders</h2>
+
+            <!-- Dashboard Cards -->
+            <div class="row mb-4">
+                <div class="col-sm-6 col-lg-3 mb-3">
+                    <div class="card bg-success text-white text-center p-3 shadow-sm border-0">
+                        <h6 class="mb-1">📦 Total Orders</h6>
+                        <h2>{{ orders|length }}</h2>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3 mb-3">
+                    <a href="/admin/users" class="text-decoration-none">
+                        <div class="card bg-info text-white text-center p-3 shadow-sm border-0">
+                            <h6 class="mb-1">👤 Total Users</h6>
+                            <h2>{{ total_users }}</h2>
+                        </div>
+                    </a>
+                </div>
+                <!-- <div class="col-sm-6 col-lg-3 mb-3">
+                    <div class="card bg-warning text-dark text-center p-3 shadow-sm border-0">
+                        <h6 class="mb-1">📅 Reservations</h6>
+                        <h2>{{ total_reservations }}</h2>
+                    </div>
+                </div> -->
+                <div class="col-sm-6 col-lg-3 mb-3">
+                    <a href="/admin/feedback" class="text-decoration-none">
+                        <div class="card bg-danger text-white text-center p-3 shadow-sm border-0">
+                            <h6 class="mb-1">💬 Feedback</h6>
+                            <h2>{{ total_feedback }}</h2>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Styled Orders Table in Card -->
+            <div class="card bg-dark text-white shadow border-0 rounded mt-4">
+                <div class="card-header border-bottom border-secondary">
+                    <h5 class="mb-0">📋 Recent Orders</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover align-middle mb-0 text-center">
+                            <thead class="table-light text-center text-dark fw-bold">
+                                <tr class="align-middle ">
+                                    <th class="text-dark" style="min-width: 80px;">#ID</th>
+                                    <th class="text-dark" style="min-width: 150px;">Customer</th>
+                                    <th class="text-dark" style="min-width: 120px;">Status</th>
+                                    <th class="text-dark" style="min-width: 150px;">Date</th>
+                                    <th class="text-dark" style="min-width: 220px;">Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for order in orders %}
+                                <tr>
+                                    <td>#{{ order[0] }}</td>
+                                    <td>{{ order[1] }}</td>
+                                    <td>
+                                        <span class="badge 
+                                            {% if order[2] == 'Pending' %}bg-secondary
+                                            {% elif order[2] == 'Preparing' %}bg-warning text-dark
+                                            {% elif order[2] == 'Ready' %}bg-primary
+                                            {% elif order[2] == 'Completed' %}bg-success
+                                            {% endif %}">
+                                            {{ order[2] }}
+                                        </span>
+                                    </td>
+                                    <td>{{ order[3] }}</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="/admin/update_status/{{ order[0] }}/Preparing"
+                                                class="btn btn-outline-light">Preparing</a>
+                                            <a href="/admin/update_status/{{ order[0] }}/Ready"
+                                                class="btn btn-outline-primary">Ready</a>
+                                            <a href="/admin/update_status/{{ order[0] }}/Served"
+                                                class="btn btn-outline-success">Served</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

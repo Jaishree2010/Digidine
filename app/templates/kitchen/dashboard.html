@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="text-warning fw-bold text-center mb-4">Kitchen Dashboard</h2>
+    <div class="table-responsive">
+        <table class="table table-dark table-hover table-bordered align-middle">
+            <thead class="table-warning text-dark">
+                <tr>
+                    <th>Order ID</th>
+                    <th>User</th>
+                    <th>Items</th>
+                    <th>Quantities</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>#{{ order[0] }}</td>
+                    <td>{{ order[3] }}</td>
+                    <td>{{ order[4] }}</td>
+                    <td>{{ order[5] }}</td>
+                    <td>{{ order[1] }}</td>
+                    <td>{{ order[2] }}</td>
+                    <td>
+                        <form method="POST" action="/kitchen/update_status/{{ order[0] }}">
+                            <select name="status" class="form-select form-select-sm mb-2" required>
+                                <option value="">Update Status</option>
+                                <option value="Preparing">Preparing</option>
+                                <option value="Ready">Ready</option>
+                                <option value="Served">Served</option>
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-success">Update</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

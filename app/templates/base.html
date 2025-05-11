@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DIGIDINE</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/static/favicon.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            /* prevent horizontal scroll */
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            background-color: #f8f9fa;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* vertically center if content is short */
+        }
+
+        footer {
+            margin-top: auto;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-warning d-flex align-items-center gap-2" href="/">
+                <img src="/static/favicon2.png" alt="Logo" width="30" height="50" style="object-fit: contain;">
+                DIGIDINE
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav gap-3">
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="/notifications">
+                            🔔
+                            {% if session.get('unread_notifications') %}
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                            {% endif %}
+                        </a>
+                    </li>
+
+
+
+
+
+                    {% if session.get('role') == 'admin' %}
+                    <li class="nav-item"><a class="nav-link" href="/customer/dashboard">Dashboard</a></li>
+                    {% endif %}
+                    {% if session.get('role') == 'customer' %}
+                    <li class="nav-item"><a class="nav-link" href="/admin/dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/customer/menu">Menu</a></li>
+
+                    <li class="nav-item"><a class="nav-link" href="/feedback/submit">Feedback</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="/customer/cart">
+                            🛒 Cart
+                            {% if session.get('cart') %}
+                            {% set total_qty = session['cart'].values() | map('int') | sum %}
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
+                                {{ total_qty }}
+                            </span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if session.get('role') == 'admin' %}
+                    <li class="nav-item"><a class="nav-link text-warning" href="/admin/menu">Manage Menu</a></li>
+                    {% endif %}
+
+                    {% if session.get('role') == 'kitchen' %}
+                    <li class="nav-item"><a class="nav-link" href="/kitchen/dashboard">Orders</a></li>
+                    {% endif %}
+
+                    {% if session.get('username') %}
+                    <li class="nav-item">
+                        <a class="nav-link text-info text-uppercase d-flex align-items-center gap-2">
+                            {{ session['username'] }}<img src="/static/profile.png" alt="Logo" width="20" height="20"
+                                style="object-fit: contain;">
+                        </a>
+                    </li>
+
+                    <li class="nav-item d-flex align-items-center">
+                        <a href="/auth/logout"
+                            class="btn btn-sm btn-outline-warning rounded-pill d-flex align-items-center gap-2"
+                            style="padding: 6px 12px;">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a>
+                    </li>
+
+
+
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow-1">
+        {% block content %}{% endblock %}
+    </main>
+
+
+    <!-- Footer -->
+    {% block footer %}
+    <footer class="bg-dark text-white text-center py-3">
+        <small>&copy; 2025 DIGIDINE - All Rights Reserved.</small>
+    </footer>
+    {% endblock %}
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+<!-- Splash Screen -->
+<div id="splash-screen" style="
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease;
+">
+    <div class="text-center">
+        <img src="/static/favicon2.png" alt="DIGIDINE" width="60" class="mb-3 animate-bounce">
+        <h3 class="text-warning fw-bold">DIGIDINE</h3>
+        <div class="spinner-border text-warning mt-3" role="status"></div>
+    </div>
+</div>
+
+<script>
+    // Hide splash screen when fully loaded
+    window.addEventListener('load', function () {
+        const splash = document.getElementById('splash-screen');
+        splash.style.opacity = 0;
+        setTimeout(() => splash.style.display = 'none', 500);
+    });
+</script>
+
+</html>

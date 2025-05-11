@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        {% include 'admin/_sidebar.html' %}
+
+
+
+        <div class="col-md-9 col-lg-10 py-5 px-4" style="min-height: 100vh;">
+            <a href="/admin/dashboard" class="btn btn-sm btn-outline-warning mb-3">← Back to Dashboard</a>
+            <h3 class="text-warning mb-3">Manage Staffs</h3>
+
+
+            <a href="/admin/users/add" class="btn btn-sm btn-success shadow">➕ Add Kitchen Staff</a>
+
+
+            {% if staff %}
+            <div class="table-responsive">
+                <table class="table table-dark table-striped text-center align-middle">
+                    <thead class="table-light text-dark">
+                        <tr>
+                            <th class="table-light text-dark">#ID</th>
+                            <th class="table-light text-dark">Username</th>
+                            <th class="table-light text-dark">Email</th>
+                            <th class="table-light text-dark">Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in staff %}
+                        <tr>
+                            <td>{{ user[0] }}</td>
+                            <td>{{ user[1] }}</td>
+                            <td>{{ user[2] }}</td>
+                            <td><span class="badge bg-secondary text-uppercase">{{ user[3] }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted text-center">No users found.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

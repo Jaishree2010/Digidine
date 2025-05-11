@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="bg-white p-5 rounded shadow" style="max-width: 500px; width: 100%;">
+        <h3 class="text-center mb-4 text-dark fw-bold">Choose Payment Method</h3>
+        <form method="POST">
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="radio" name="method" id="cash" value="cash" required>
+                <label class="form-check-label" for="cash">💵 Cash</label>
+            </div>
+            <div class="form-check mb-4">
+                <input class="form-check-input" type="radio" name="method" id="qr" value="qr">
+                <label class="form-check-label" for="qr">📱 QR Code Scan</label>
+            </div>
+            {% if show_qr %}
+            <div class="text-center mb-3">
+                <img src="/static/images/qr.png" alt="Scan QR" style="width: 200px;">
+                <p class="text-muted small mt-2">Scan to Pay</p>
+            </div>
+            {% endif %}
+            <button class="btn btn-success w-100">Complete Payment</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
