@@ -33,8 +33,7 @@ def create_app():
     app.config['MAIL_USE_TLS'] = CONFIG['MAIL_USE_TLS']
     app.config['MAIL_USERNAME'] = CONFIG['MAIL_USERNAME']
     app.config['MAIL_PASSWORD'] = CONFIG['MAIL_PASSWORD']
-    app.config['MAIL_USE_SSL'] = CONFIG['MAIL_USE_SSL']
-    app.config['MAIL_DEFAULT_SENDER'] = ('DIGIDINE', 'work.jeevanebi@gmail.com')
+    app.config['MAIL_DEFAULT_SENDER'] = ('DIGIDINE', 'noreply.digidine.com')
     mail.init_app(app)
 
     mysql.init_app(app)
